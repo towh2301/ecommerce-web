@@ -1,5 +1,4 @@
 # This is my team project
-# Welcome to Our Fast Food!
 
 ## About Us
 At [Your E-Shop Name], we are passionate about delivering delicious and convenient fast food options to satisfy your cravings. Our menu is carefully crafted with a variety of mouthwatering choices that are sure to please any appetite.
