@@ -1,7 +1,7 @@
 # This is my team project
 
 ## About Us
-At [Your E-Shop Name], we are passionate about delivering delicious and convenient fast food options to satisfy your cravings. Our menu is carefully crafted with a variety of mouthwatering choices that are sure to please any appetite.
+This is our project for university, if you find it interesting, let us know.
 
 ## Our Menu
 
