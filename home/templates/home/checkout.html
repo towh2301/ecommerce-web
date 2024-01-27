@@ -1,0 +1,273 @@
+{% extends "base.html" %}
+{% load static %}
+{% load cart_template_tags %}
+
+{% block scripts %}
+<link rel="stylesheet" href="{% static "css/checkout.css" %}">
+{% comment %} Google map {% endcomment %}
+<script async defer
+    src="https://maps.googleapis.com/maps/api/js?key=AIzaSyAHAdpK0BCpoBY8ITg4-eT98ZDWV-NnH8Y&libraries=places&callback=initMap">
+</script>
+<script>
+    function initMap() {
+
+        // Create the map with original destination and zoom level
+        var map = new google.maps.Map(document.getElementById('map'), {
+            center: {
+                lat: 11.0530121,
+                lng: 106.6661689
+            },
+            zoom: 16
+        });
+
+        var des_coordinates_lat = "{{ des_coordinates_lat }}";
+        var des_coordinates_lng = "{{ des_coordinates_lng }}";
+        var origin = new google.maps.LatLng(11.0530121, 106.6661689);
+        var destination = new google.maps.LatLng(des_coordinates_lat, des_coordinates_lng);
+        
+        // Calculate distance and display it
+        var directionsService = new google.maps.DirectionsService();
+        var directionsRenderer = new google.maps.DirectionsRenderer({
+            map: map,
+        });
+
+        // Request directions from origin to destination
+        var request = {
+            origin: origin,
+            destination: destination,
+            travelMode: 'DRIVING'
+        };
+
+        directionsService.route(request, function (response, status) {
+            if (status === 'OK') {
+                directionsRenderer.setDirections(response);
+                // var duration = response.routes[0].legs[0].duration.text;
+            } else {
+                alert('Error getting directions: ' + status);
+            }
+        });
+    }
+</script>
+
+
+
+{% endblock scripts %}
+
+
+{% block checkout %}
+
+<div class="container row-div" style="margin-top: 90px">
+    <div class="checkout-card table-reponsive col-md-5 col-sm-8">
+        <form action="{% url "home:payment" %}" id="create_form" method="post">
+            <h5 class="mt-3 ">
+                <a href="{% url "home:cart-summary" %}">
+                    <button id="show-order-summary-details" type="button" class="return-btn"><i
+                            class="fas fa-long-arrow-alt-left me-2 "></i>
+                    </button>
+                </a>
+                Order Summary
+            </h5>
+            <hr>
+            <div class='justify-content-center align-items-center'>
+                <div class='window'>
+                    <div class='order-info'>
+
+                        <div class='order-info-content'>
+
+                            <div class='line'></div>
+                            {#                            <img src="{% static 'images/thanks-image.jpg' %}">#}
+                            <table class='order-table'>
+                                <tbody>
+                                    <tr>
+                                        {% comment %} <td><img src='{% static 'images/thanks-image.jpg' %}'
+                                                class='full-width'></img>
+                                        </td> {% endcomment %}
+                                    </tr>
+                                </tbody>
+                            </table>
+                            <div class='line'></div>
+                            <div class='total'>
+                                {% comment %} <span style='float:left;'>
+                                    <div class='thin dense'>Delivery</div>
+                                    TOTAL
+                                </span> {% endcomment %}
+                                <span style='float:right; text-align:right;'>
+                                    {% comment %} <div class='thin dense'>$????</div> {% endcomment %}
+                                    {% comment %} <div id="final-total-money">${{ object.get_total_final_price }}</div>
+                                    {% endcomment %}
+                                </span>
+                            </div>
+                        </div>
+                    </div>
+                    <div class='credit-info'>
+                        <div class='credit-info-content'>
+                            <table class='half-input-table'>
+                                <tr id="tr-row">
+                                    {% comment %} <td><b>Please select your card:</b></td> {% endcomment %}
+                                    <td>
+                                        <div class='dropdown' id='card-dropdown' style="display: none">
+                                            {% comment %} <div class='dropdown-btn' id='current-card'>Visa</div>
+                                            <div class='dropdown-select'>
+                                                <ul>
+                                                    <li>Master Card</li>
+                                                    <li>American Express</li>
+                                                </ul>
+                                            </div> {% endcomment %}
+                                            {% comment %} <label for="bank_code">Ngân hàng</label> {% endcomment %}
+                                            <div class="form-group">
+                                                <select name="bank_code" id="bank_code" class="form-control">
+                                                    <option value=''>None</option>
+                                                    <option value="VISA"> VISA</option>
+                                                    <option value="NCB">NCB Bank</option>
+                                                    <option value="AGRIBANK">Agribank</option>
+                                                    <option value="SCB">SCB</option>
+                                                    <option value="SACOMBANK">SacomBank</option>
+                                                    <option value="EXIMBANK">EximBank</option>
+                                                    <option value="MSBANK">MSBANK</option>
+                                                    <option value="NAMABANK">NamABank</option>
+                                                    <option value="VNMART">VnMart</option>
+                                                    <option value="VIETINBANK">Vietinbank</option>
+                                                    <option value="VIETCOMBANK">VCB</option>
+                                                    <option value="HDBANK">HDBank</option>
+                                                    <option value="DONGABANK">Dong A</option>
+                                                    <option value="TPBANK">TPBank</option>
+                                                    <option value="OJB">OceanBank</option>
+                                                    <option value="BIDV">BIDV</option>
+                                                    <option value="TECHCOMBANK">Techcombank</option>
+                                                    <option value="VPBANK">VPBank</option>
+                                                    <option value="MBBANK">MBBank</option>
+                                                    <option value="ACB">ACB</option>
+                                                    <option value="OCB">OCB</option>
+                                                    <option value="IVB">IVB</option>
+                                                </select>
+                                            </div>
+                                        </div>
+                                    </td>
+                                </tr>
+                            </table>
+                            {% comment %} <img
+                                src='https://dl.dropboxusercontent.com/s/ubamyu6mzov5c80/visa_logo%20%281%29.png'
+                                height='80' class='credit-card-image' id='credit-card-image'></img> {% endcomment %}
+                            <div class="form-group">
+                                <label for="order_desc">Payment Note</label>
+                                <textarea class="form-control" cols="20" id="order_desc" name="order_desc"
+                                    rows="2">Time order: {% now "Y-m-d H:i:s" %}</textarea>
+                            </div>
+                            <div class="form-group">
+                                <label for="order_id">Order Code</label>
+                                <input class="form-control" id="order_id" name="order_id" type="text"
+                                    value="{% now "YmdHis" %}" readonly />
+                            </div>
+
+                            <div class="form-group">
+                                <label for="amount">Amount of Money</label>
+                                <input class="form-control" id="amount" name="amount" type="text"
+                                    value="{{ object.get_total|floatformat:0 }}" readonly />
+                            </div>
+                            <div class="form-group">
+                                <label for="language">Language</label>
+                                <select name="language" id="language" class="form-control">
+                                    <option value="vn">Tiếng Việt</option>
+                                    <option value="en">English</option>
+                                </select>
+                            </div>
+                            <br>
+                            <div>
+                                <span style="
+                                color: white; 
+                                background-color: rgb(226,135,67);
+                                padding: 6px;
+                                border-radius: 5px;
+                                font-weight: bold;
+                            ">
+                                    {{ delivery_info }}
+                                </span>
+                            </div>
+                            <br>
+
+                        </div>
+                        <button type="submit" class='btn btn-outline-primary pay-btn '>Confirm Payment</button>
+                    </div>
+                </div>
+            </div>
+            {% csrf_token %}
+        </form>
+    </div>
+    <div class="col-md-5" id="map"></div>
+</div>
+
+{% endblock %}
+{% block offerSection %}
+{% endblock offerSection %}
+
+{% block aboutSection %}
+{% endblock aboutSection %}
+
+{% block bookSection %}
+{% endblock bookSection %}
+
+{% block clientSection %}
+{% endblock clientSection %}
+
+{% block headerSection %}
+<!-- header section strats -->
+<header class="header_section">
+    <div class="container">
+        <nav class="navbar navbar-expand-lg custom_nav-container ">
+            <a class="navbar-brand" href="{% url 'home:home' %}">
+                <span>
+                    Feane
+                </span>
+            </a>
+
+            <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSupportedContent"
+                aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+                <span class=""> </span>
+            </button>
+            <div class="collapse navbar-collapse" id="navbarSupportedContent">
+                <ul class="navbar-nav  mx-auto ">
+                    <li class="nav-item">
+                        <a class="nav-link" href="{% url 'home:home' %}">Home <span class="sr-only">(current)</span></a>
+                    </li>
+                    <li class="nav-item ">
+                        <a class="nav-link" href="{% url 'home:menu' %}">Menu</a>
+                    </li>
+                    <li class="nav-item active">
+                        <a class="nav-link" href="{% url 'home:about' %}">About</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="{% url 'home:book-table' %}">Book Table</a>
+                    </li>
+                </ul>
+                <div class="user_option">
+                    {% if request.user.is_authenticated %}
+                    <div class="dropdown">
+                        <a href="#" class="user_link" id="dropdownMenuLink" data-toggle="dropdown">
+                            <i class="fa fa-user" aria-hidden="true"></i>
+                        </a>
+                        <div class="dropdown-menu dropdown-menu-right" aria-labelledby="dropdownMenuLink">
+                            <a class="dropdown-item" href="{% url 'home:get-profile-user' %}">Profile</a>
+                            <a class="dropdown-item" href="{% url 'home:logout' %}">Log out</a>
+                        </div>
+                    </div>
+
+                    {% else %}
+                    <a href="{% url 'home:login' %}" class="user_link">
+                        <i class="fa fa-user" aria-hidden="true"></i>
+                    </a>
+                    {% endif %}
+                    <a class="text-reset me-3" id="cart-icon" href="{% url 'home:cart-summary' %}">
+                        <i class="fas fa-shopping-cart" style="color: white;"></i>
+                        <span class="badge rounded-pill badge-notification bg-danger" id="cart-item-count"
+                            style="background-color: #ffbe33!important;">{{ request|cart_item_count }}</span>
+                    </a>
+                    <a href="" class="order_online">
+                        Order Online
+                    </a>
+                </div>
+            </div>
+        </nav>
+    </div>
+</header>
+<!-- end header section -->
+{% endblock headerSection %}

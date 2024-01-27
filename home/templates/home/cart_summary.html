@@ -1,0 +1,347 @@
+{% extends "base.html" %}
+{% load cart_template_tags %}
+{% load static %}
+
+{% block scripts %}
+<script src="{% static "home/alter_product.js" %}" defer></script>
+<link rel="stylesheet" href="{% static "css/cart-sumary.css" %}">
+{% comment %} <script src="https://maps.googleapis.com/maps/api/js?key=AIzaSyCvkZ0ueuNA5W3omvHaEr-0Czn2viIs2Uw">
+</script> {% endcomment %}
+<script src="{% static 'home/checkout.js' %}" defer></script>
+<script src="{% static 'home/notifications.js' %}" defer></script>
+<script src="{% static 'home/change_profile.js' %}" defer></script>
+
+{% endblock scripts %}
+
+{% block cart %}
+<!-- cart section -->
+<div id="message"></div>
+<section class="h-100 h-custom" style="background-color: #eee; margin-top: 80px">
+    <div class="container py-5 h-100">
+        <div class="row justify-content-center align-items-center h-100  order-summary-details">
+            <div class="col">
+                <div class="card">
+                    <div class="card-body p-4">
+                        <div class="row">
+                            <div class="col-lg-7" id="card-container">
+                                <h5 class="mb-3"><a href="/" class="text-body" style="font-weight: 600"><i
+                                            class="fas fa-long-arrow-alt-left me-2"
+                                            style="margin-right: 10px"></i>Continue
+                                        shopping</a>
+                                    <a href="{% url "home:filter-billing" %}" class="billing-link">
+                                        <i class="fas fa-money-bill"></i></i>
+                                    </a>
+                                </h5>
+                                <hr>
+                                <div class="d-flex justify-content-between align-items-center mb-4">
+                                    <div>
+                                        <p class="mb-1">Shopping cart</p>
+                                        <p class="mb-0">You have
+                                            <span id="order-sum-cart">{{ object.items.count }}</span> items in
+                                            your cart</p>
+                                    </div>
+                                    <div>
+                                        <p class="mb-0"><span class="text-muted">Sort by:</span>
+                                            <button class="sort-btn is-checked">price
+                                                <i class="fas fa-angle-up mt-1 sort-icon"></i>
+                                            </button>
+                                        </p>
+                                    </div>
+                                </div>
+                                <div class="grid">
+                                    {% for order_item in object.items.all %}
+                                    {% csrf_token %}
+                                    <div class="card card-custom mb-3" id="card{{ order_item.item.id }}">
+                                        <div class="card-body">
+                                            <div class="d-flex justify-content-between">
+                                                <div class="d-flex flex-row align-items-center">
+                                                    <div>
+                                                        <img src="{{ order_item.item.image.url }}" class="img-fluid"
+                                                            alt="Shopping item" style="width: 100%; max-width: 250px">
+                                                    </div>
+                                                    <div class="ms-3" style="margin-left: 1rem!important;">
+                                                        <h5>{{ order_item.item.title }}</h5>
+                                                        <p class="small mb-0">{{ order_item.item.description }}</p>
+                                                    </div>
+                                                </div>
+                                                {#                          This is quantity                      #}
+
+                                                <div class="d-flex flex-row align-items-center">
+                                                    <div style="display: flex; align-items: stretch; margin-right: 10px"
+                                                        class="order_item">
+                                                        <button
+                                                            style="background-color: white; border: none; outline: none">
+                                                            <i class="fas fa-minus mr-2 update-btn"
+                                                                id="update-btn-minus-{{ order_item.item.id }}"
+                                                                data-action="minus"
+                                                                data-slug="{{ order_item.item.slug }}"
+                                                                data-value="{{ order_item.quantity }}"
+                                                                data-product="{{ order_item.item.id }}"
+                                                                data-object="{{ object.items.count }}"></i>
+                                                        </button>
+
+                                                        <span
+                                                            id="quantity-display-{{ order_item.item.id }}">{{ order_item.quantity }}</span>
+
+                                                        <button
+                                                            style="outline: none; border: none; background-color: white">
+                                                            <i class="fas fa-plus ml-2 update-btn"
+                                                                id="update-btn-plus-{{ order_item.item.id }}"
+                                                                data-action="plus"
+                                                                data-slug="{{ order_item.item.slug }}"
+                                                                data-value="{{ order_item.quantity }}"
+                                                                data-product="{{ order_item.item.id }}"
+                                                                data-object="{{ object.items.count }}"></i>
+                                                        </button>
+                                                    </div>
+
+                                                    {#                         End of quantity                    #}
+
+                                                    <div style="margin-right: 10px; width: 80px">
+                                                        {% if order_item.item.discount %}
+                                                        <h6 class="total-price mb-0"
+                                                            id="total-price-{{ order_item.item.id }}">
+                                                            {{ order_item.get_total_discount_item_price }}đ
+                                                        </h6>
+                                                        <span class="badge badge-primary"
+                                                            style="background-color: crimson">
+                                                            {{ order_item.item.discount }}% OFF</span>
+                                                        {% else %}
+                                                        <h6 class="total-price mb-0"
+                                                            id="total-price-{{ order_item.item.id }}">
+                                                            {{ order_item.get_total_item_price }}đ
+                                                        </h6>
+                                                        {% endif %}
+                                                    </div>
+                                                    <button class="remove-button">
+                                                        <i class="fas fa-trash-alt remove-btn"
+                                                            data-id="{{ order_item.item.id }}"
+                                                            data-slug="{{ order_item.item.slug }}"
+                                                            data-object="{{ object.items.count }}"></i>
+                                                    </button>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    {% endfor %}
+                                </div>
+                            </div>
+
+                            <div class="col-lg-5">
+                                <div class="card bg-primary text-white rounded-3">
+                                    {% comment %} Form submit checkout {% endcomment %}
+
+                                    <div class="card-body" style="background-color: #4488dd">
+                                        <div class="d-flex justify-content-between align-items-center">
+                                            <h5 class="mb-0">Address Details</h5>
+                                            <img src="{% static 'images/user-avatar.png' %}" class="img-fluid rounded-3"
+                                                style="width: 45px;" alt="Avatar">
+                                        </div>
+                                        <select id="address-dropdown" class="flex-grow-1 form-control">
+                                            <option value="default" data-street="{{ default_address.street }}"
+                                                data-ward="{{ default_address.ward }}"
+                                                data-district="{{ default_address.district }}"
+                                                data-city="{{ default_address.city }}">
+                                                &lt;Default address&gt;
+                                            </option>
+                                            {% if optional_addresses %}
+                                            {% for address in optional_addresses %}
+                                            <option value="optional" data-street="{{ address.street }}"
+                                                data-ward="{{ address.ward }}" data-district="{{ address.district }}"
+                                                data-city="{{ address.city }}" data-id="{{ address.id }}"
+                                                class="optional-address">
+                                                &lt;Optional address&gt;
+                                            </option>
+                                            {% endfor %}
+                                            {% endif %}
+                                        </select>
+                                        <form method="post" action="/checkout/" id="checkoutForm">
+                                            {% csrf_token %}
+                                            <label class="medium mb-1" for="inputCity"
+                                                style="margin-top: 10px">City</label>
+                                            <select class="form-control" name="city" id="inputCity">
+                                                {% if is_blank %}
+                                                <option value="" selected="selected">Choose your city
+                                                </option>
+                                                {% for city in cities %}
+                                                <option class="cities" value="{{ city.name }}" data-id="{{ city.id }}">
+                                                    {{ city.name_with_type }}</option>
+                                                {% endfor %}
+                                                {% else %}
+                                                <option value="">Choose your city</option>
+                                                {% for city in cities %}
+                                                {% if city.name == default_address.city %}
+                                                <option class="cities" selected="selected" value="{{ city.name }}"
+                                                    data-id="{{ city.id }}">{{ city.name_with_type }}</option>
+                                                {% else %}
+                                                <option class="cities" value="{{ city.name }}" data-id="{{ city.id }}">
+                                                    {{ city.name_with_type }}</option>
+                                                {% endif %}
+                                                {% endfor %}
+                                                {% endif %}
+                                            </select>
+
+                                            <label class="medium mb-1" for="inputDistrict"
+                                                style="margin-top: 10px">District</label>
+                                            <select class="form-control" name="district" id="inputDistrict">
+                                                {% if is_blank %}
+                                                <option value="" selected="selected">Choose your
+                                                    district
+                                                </option>
+                                                {% for district in districts %}
+                                                <option class="districts" value="{{ district.name }}"
+                                                    data-id="{{ district.id }}">{{ district.name_with_type }}</option>
+                                                {% endfor %}
+                                                {% else %}
+                                                <option value="">Choose your district</option>
+                                                {% for district in districts %}
+                                                {% if district.parent_code_id == city_id %}
+                                                {% if district.name == default_address.district %}
+                                                <option class="districts" selected="selected"
+                                                    value="{{ district.name }}" data-id="{{ district.id }}">
+                                                    {{ district.name_with_type }}</option>
+                                                {% else %}
+                                                <option class="districts" value="{{ district.name }}"
+                                                    data-id="{{ district.id }}">{{ district.name_with_type }}</option>
+                                                {% endif %}
+                                                {% endif %}
+                                                {% endfor %}
+                                                {% endif %}
+                                            </select>
+
+                                            <label class="medium mb-1" for="inputWard"
+                                                style="margin-top: 10px">Ward</label>
+                                            <select class="form-control" name="ward" id="inputWard">
+                                                {% if is_blank %}
+                                                <option value="" selected>Choose your ward</option>
+                                                {% for ward in wards %}
+                                                <option class="wards" value="{{ ward.name }}" data-id="{{ ward.id }}">
+                                                    {{ ward.name_with_type }}</option>
+                                                {% endfor %}
+                                                {% else %}
+                                                <option value="">Choose your ward</option>
+                                                {% for ward in wards %}
+                                                {% if ward.parent_code_id == district_id %}
+                                                {% if ward.name == default_address.ward %}
+                                                <option class="wards" selected value="{{ ward.name }}"
+                                                    data-id="{{ ward.id }}">{{ ward.name_with_type }}</option>
+                                                {% else %}
+                                                <option class="wards" value="{{ ward.name }}" data-id="{{ ward.id }}">
+                                                    {{ ward.name_with_type }}</option>
+                                                {% endif %}
+                                                {% endif %}
+                                                {% endfor %}
+                                                {% endif %}
+                                            </select>
+
+                                            <label class="medium mb-1" for="inputStreet"
+                                                style="margin-top: 10px">Street</label>
+                                            <input class="form-control" name="address" id="inputStreet" type="text"
+                                                placeholder="Enter your street" value="{{ default_address.street }}">
+
+                                            <input type="checkbox" id="saveAsDefaultAddress" name="saveAsDefaultAddress"
+                                                value="true" style="margin-top: 20px">
+                                            <label for="saveAsDefaultAddress">Save as default address</label>
+
+                                            <div class="d-flex justify-content-between mb-4">
+                                                <p class="mb-2">Total Money(Excl. taxes)</p>
+                                                <p class="mb-2" id="main-total">{{ object.get_total }}đ</p>
+                                            </div>
+                                            <button type="submit" class="btn btn-info btn-block btn-lg"
+                                                id="checkout-btn">
+                                                <div class="d-flex justify-content-center">
+                                                    <span>Checkout <i
+                                                            class="fas fa-long-arrow-alt-right ms-2"></i></span>
+                                                </div>
+                                            </button>
+                                        </form>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+</section>
+<!-- end cart section -->
+{% endblock cart %}
+
+{% block foodSection %}
+{% endblock foodSection %}
+
+{% block offerSection %}
+{% endblock offerSection %}
+
+{% block bookSection %}
+{% endblock bookSection %}
+
+{% block clientSection %}
+{% endblock clientSection %}
+
+{% block aboutSection %}
+{% endblock aboutSection %}
+
+{% block headerSection %}
+<!-- header section strats -->
+<header class="header_section">
+    <div class="container">
+        <nav class="navbar navbar-expand-lg custom_nav-container ">
+            <a class="navbar-brand" href="{% url 'home:home' %}">
+                <span>
+                    Feane
+                </span>
+            </a>
+
+            <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSupportedContent"
+                aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+                <span class=""> </span>
+            </button>
+
+            <div class="collapse navbar-collapse" id="navbarSupportedContent">
+                <ul class="navbar-nav  mx-auto ">
+                    <li class="nav-item">
+                        <a class="nav-link" href="{% url 'home:home' %}">Home <span class="sr-only">(current)</span></a>
+                    </li>
+                    <li class="nav-item ">
+                        <a class="nav-link" href="{% url 'home:menu' %}">Menu</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="{% url 'home:about' %}">About</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="{% url 'home:book-table' %}">Book Table</a>
+                    </li>
+                </ul>
+                <div class="user_option">
+                    {% if request.user.is_authenticated %}
+                    <div class="dropdown">
+                        <a href="#" class="user_link" id="dropdownMenuLink" data-toggle="dropdown">
+                            <i class="fa fa-user" aria-hidden="true"></i>
+                        </a>
+                        <div class="dropdown-menu dropdown-menu-right" aria-labelledby="dropdownMenuLink">
+                            <a class="dropdown-item" href="{% url 'home:get-profile-user' %}">Profile</a>
+                            <a class="dropdown-item" href="{% url 'home:logout' %}">Log out</a>
+                        </div>
+                    </div>
+
+                    {% else %}
+                    <a href="{% url 'home:login' %}" class="user_link">
+                        <i class="fa fa-user" aria-hidden="true"></i>
+                    </a>
+                    {% endif %}
+                    <a class="text-reset me-3" id="cart-icon" href="{% url 'home:cart-summary' %}">
+                        <i class="fas fa-shopping-cart" style="color: white;"></i>
+                        <span class="badge rounded-pill badge-notification bg-danger" id="cart-item-count"
+                            style="background-color: #ffbe33!important;">{{ request|cart_item_count }}</span>
+                    </a>
+                    <a href="" class="order_online">
+                        Order Online
+                    </a>
+                </div>
+            </div>
+        </nav>
+    </div>
+</header>
+<!-- end header section -->
+{% endblock headerSection %}

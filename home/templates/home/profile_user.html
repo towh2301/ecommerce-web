@@ -1,0 +1,302 @@
+{% extends 'base.html' %}
+{% load static %}
+{% load cart_template_tags %}
+
+{% block scripts %}
+<script src="{% static 'home/change_profile.js' %}" defer></script>
+<script src="{% static 'home/notifications.js' %}" defer></script>
+<script src="{% static 'home/change_password.js' %}" defer></script>
+{% endblock scripts %}
+
+{% block profileUser %}
+<!-- profile user section -->
+<div id="message"></div>
+<div class="container px-4 user-profile" style="margin-top: 100px">
+    <hr class="mt-0 mb-4">
+    <div class="row">
+        <div class="col-xl-4">
+            <!-- Change Password card-->
+            <div class="card mb-4 mb-xl-0">
+                <div class="card-header">Change Password</div>
+                <div class="card-body">
+                    <div class="alert alert-warning delete-default-address" role="alert" style="display: none">
+                        You cannot delete default address!
+                    </div>
+                    <form>
+                        {% csrf_token %}
+                        <div class="row gx-3 mb-3">
+                            <!-- Form Group (current password)-->
+                            <div class="col-md-12">
+                                <label class="small mb-1" for="inputCurrentPassword">Current password</label>
+                                <input class="form-control" id="inputCurrentPassword" type="password"
+                                    placeholder="&#x2022;&#x2022;&#x2022;&#x2022;&#x2022;&#x2022;&#x2022;&#x2022;&#x2022;&#x2022;&#x2022;&#x2022;">
+                            </div>
+                            <!-- Form Group (new password)-->
+                            <div class="col-md-12">
+                                <label class="small mb-1" for="inputNewPassword">New password</label>
+                                <input class="form-control" id="inputNewPassword" type="password"
+                                    placeholder="&#x2022;&#x2022;&#x2022;&#x2022;&#x2022;&#x2022;&#x2022;&#x2022;&#x2022;&#x2022;&#x2022;&#x2022;">
+                            </div>
+                            <!-- Form Group (confirm new password)-->
+                            <div class="col-md-12">
+                                <label class="small mb-1" for="inputConfirmNewPassword">Confirm new
+                                    password</label>
+                                <input class="form-control" id="inputConfirmNewPassword" type="password"
+                                    placeholder="&#x2022;&#x2022;&#x2022;&#x2022;&#x2022;&#x2022;&#x2022;&#x2022;&#x2022;&#x2022;&#x2022;&#x2022;">
+                            </div>
+                        </div>
+                        <button class="btn btn-warning" type="button" id="change-password">Change Password
+                        </button>
+                    </form>
+                </div>
+
+            </div>
+        </div>
+        <div class="col-xl-8">
+            <!-- Account details card-->
+            <div class="card mb-4">
+                <div class="card-header">Account Details</div>
+                <div class="card-body">
+                    <div class="alert alert-warning delete-default-address" role="alert" style="display: none">
+                        You cannot delete default address!
+                    </div>
+                    <div class="alert alert-success delete-optional-address" role="alert" style="display: none">
+                        Deleted optional address!!!
+                    </div>
+                    <form>
+                        {% csrf_token %}
+                        <div class="row gx-3 mb-3">
+                            <!-- Form Group (first name)-->
+                            <div class="col-md-6">
+                                <label class="small mb-1" for="inputFirstName">First name</label>
+                                <input class="form-control" id="inputFirstName" type="text"
+                                    placeholder="Enter your first name" value="{{ user.first_name }}">
+                            </div>
+                            <!-- Form Group (last name)-->
+                            <div class="col-md-6">
+                                <label class="small mb-1" for="inputLastName">Last name</label>
+                                <input class="form-control" id="inputLastName" type="text"
+                                    placeholder="Enter your last name" value="{{ user.last_name }}">
+                            </div>
+                        </div>
+                        <!-- Form Row        -->
+                        <div class="row gx-3 mb-3">
+                            <!-- Form Group (organization name)-->
+                            <div class="col-md-12 d-flex align-items-center">
+                                <select id="address-dropdown" class="flex-grow-1 form-control"
+                                    style="margin-right: 5px;">
+                                    <option value="default" data-street="{{ default_address.street }}"
+                                        data-ward="{{ default_address.ward }}"
+                                        data-district="{{ default_address.district }}"
+                                        data-city="{{ default_address.city }}">
+                                        &lt;Default address&gt;
+                                    </option>
+                                    {% if optional_addresses %}
+                                    {% for address in optional_addresses %}
+                                    <option value="optional" data-street="{{ address.street }}"
+                                        data-ward="{{ address.ward }}" data-district="{{ address.district }}"
+                                        data-city="{{ address.city }}" data-id="{{ address.id }}"
+                                        class="optional-address">
+                                        &lt;Optional address&gt;
+                                    </option>
+                                    {% endfor %}
+                                    {% endif %}
+                                    {% if optional_addresses.count < 2 %}
+                                    <option value="add-optional-address" class="add-optional-address">
+                                        &lt;Add optional address&gt;
+                                    </option>
+                                    {% endif %}
+                                </select>
+                                <button id="delete-profile-button" class="btn btn-danger" type="button">Delete
+                                </button>
+                            </div>
+                            <!-- Form Group (location)-->
+                            <div class="col-md-6">
+                                <label class="small mb-1" for="inputCity">City</label>
+                                <select class="form-control" id="inputCity">
+                                    {% if is_blank %}
+                                    <option value="" selected="selected">Choose your city</option>
+                                    {% for city in cities %}
+                                    <option class="cities" value="{{ city.name }}" data-id="{{ city.id }}">
+                                        {{ city.name_with_type }}</option>
+                                    {% endfor %}
+                                    {% else %}
+                                    <option value="">Choose your city</option>
+                                    {% for city in cities %}
+                                    {% if city.name == default_address.city %}
+                                    <option class="cities" selected="selected" value="{{ city.name }}"
+                                        data-id="{{ city.id }}">{{ city.name_with_type }}</option>
+                                    {% else %}
+                                    <option class="cities" value="{{ city.name }}" data-id="{{ city.id }}">
+                                        {{ city.name_with_type }}</option>
+                                    {% endif %}
+                                    {% endfor %}
+                                    {% endif %}
+                                </select>
+                            </div>
+                            <div class="col-md-6">
+                                <label class="small mb-1" for="inputDistrict">District</label>
+                                <select class="form-control" id="inputDistrict">
+                                    {% if is_blank %}
+                                    <option value="" selected="selected">Choose your district</option>
+                                    {% for district in districts %}
+                                    <option class="districts" value="{{ district.name }}" data-id="{{ district.id }}">
+                                        {{ district.name_with_type }}</option>
+                                    {% endfor %}
+                                    {% else %}
+                                    <option value="">Choose your district</option>
+                                    {% for district in districts %}
+                                    {% if district.parent_code_id == city_id %}
+                                    {% if district.name == default_address.district %}
+                                    <option class="districts" selected="selected" value="{{ district.name }}"
+                                        data-id="{{ district.id }}">{{ district.name_with_type }}</option>
+                                    {% else %}
+                                    <option class="districts" value="{{ district.name }}" data-id="{{ district.id }}">
+                                        {{ district.name_with_type }}</option>
+                                    {% endif %}
+                                    {% endif %}
+                                    {% endfor %}
+                                    {% endif %}
+                                </select>
+                            </div>
+                            <!-- Form Group (location)-->
+                            <div class="col-md-6">
+                                <label class="small mb-1" for="inputWard">Ward</label>
+                                <select class="form-control" id="inputWard">
+                                    {% if is_blank %}
+                                    <option value="" selected>Choose your ward</option>
+                                    {% for ward in wards %}
+                                    <option class="wards" value="{{ ward.name }}" data-id="{{ ward.id }}">
+                                        {{ ward.name_with_type }}</option>
+                                    {% endfor %}
+                                    {% else %}
+                                    <option value="">Choose your ward</option>
+                                    {% for ward in wards %}
+                                    {% if ward.parent_code_id == district_id %}
+                                    {% if ward.name == default_address.ward %}
+                                    <option class="wards" selected value="{{ ward.name }}" data-id="{{ ward.id }}">
+                                        {{ ward.name_with_type }}</option>
+                                    {% else %}
+                                    <option class="wards" value="{{ ward.name }}" data-id="{{ ward.id }}">
+                                        {{ ward.name_with_type }}</option>
+                                    {% endif %}
+                                    {% endif %}
+                                    {% endfor %}
+                                    {% endif %}
+                                </select>
+                            </div>
+                            <div class="col-md-6">
+                                <label class="small mb-1" for="inputStreet">Street</label>
+                                <input class="form-control" id="inputStreet" type="text" placeholder="Enter your street"
+                                    value="{{ default_address.street }}">
+                            </div>
+
+                        </div>
+                        <!-- Form Group (email address)-->
+                        <div class="mb-3">
+                            <label class="small mb-1" for="inputEmailAddress">Email address</label>
+                            <input class="form-control" id="inputEmailAddress" type="email"
+                                placeholder="Enter your email address" value="{{ user.email }}">
+                        </div>
+                        <!-- Form Row-->
+                        <div class="row gx-3 mb-3">
+                            <!-- Form Group (phone number)-->
+                            <div class="col-md-6">
+                                <label class="small mb-1" for="inputPhone">Phone number</label>
+                                <input class="form-control" id="inputPhone" type="tel"
+                                    placeholder="Enter your phone number" value="{{ user.userprofile.phone_number }}"
+                                    maxlength="10">
+                            </div>
+                            <!-- Form Group (birthday)-->
+                            <div class="col-md-6">
+                                <label class="small mb-1" for="inputBirthday">Birthday</label>
+                                <input class="form-control" id="inputBirthday" type="date" name="birthday"
+                                    placeholder="Enter your birthday" value="{{ date_of_birth }}">
+
+                            </div>
+                        </div>
+                        <!-- Save changes button-->
+                        <button class="btn btn-warning" type="button" id="change-profile">Save changes</button>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<!-- end profile user section -->
+{% endblock profileUser %}
+
+{% block offerSection %}
+{% endblock offerSection %}
+
+{% block aboutSection %}
+{% endblock aboutSection %}
+
+{% block bookSection %}
+{% endblock bookSection %}
+
+{% block clientSection %}
+{% endblock clientSection %}
+
+{% block headerSection %}
+<!-- header section strats -->
+<header class="header_section">
+    <div class="container">
+        <nav class="navbar navbar-expand-lg custom_nav-container ">
+            <a class="navbar-brand" href="{% url 'home:home' %}">
+                <span>
+                    Feane
+                </span>
+            </a>
+
+            <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSupportedContent"
+                aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+                <span class=""> </span>
+            </button>
+            <div class="collapse navbar-collapse" id="navbarSupportedContent">
+                <ul class="navbar-nav  mx-auto ">
+                    <li class="nav-item">
+                        <a class="nav-link" href="{% url 'home:home' %}">Home <span class="sr-only">(current)</span></a>
+                    </li>
+                    <li class="nav-item ">
+                        <a class="nav-link" href="{% url 'home:menu' %}">Menu</a>
+                    </li>
+                    <li class="nav-item active">
+                        <a class="nav-link" href="{% url 'home:about' %}">About</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="{% url 'home:book-table' %}">Book Table</a>
+                    </li>
+                </ul>
+                <div class="user_option">
+                    {% if request.user.is_authenticated %}
+                    <div class="dropdown">
+                        <a href="#" class="user_link" id="dropdownMenuLink" data-toggle="dropdown">
+                            <i class="fa fa-user" aria-hidden="true"></i>
+                        </a>
+                        <div class="dropdown-menu dropdown-menu-right" aria-labelledby="dropdownMenuLink">
+                            <a class="dropdown-item" href="{% url 'home:get-profile-user' %}">Profile</a>
+                            <a class="dropdown-item" href="{% url 'home:logout' %}">Log out</a>
+                        </div>
+                    </div>
+
+                    {% else %}
+                    <a href="{% url 'home:login' %}" class="user_link">
+                        <i class="fa fa-user" aria-hidden="true"></i>
+                    </a>
+                    {% endif %}
+                    <a class="text-reset me-3" id="cart-icon" href="{% url 'home:cart-summary' %}">
+                        <i class="fas fa-shopping-cart" style="color: white;"></i>
+                        <span class="badge rounded-pill badge-notification bg-danger" id="cart-item-count"
+                            style="background-color: #ffbe33!important;">{{ request|cart_item_count }}</span>
+                    </a>
+                    <a href="" class="order_online">
+                        Order Online
+                    </a>
+                </div>
+            </div>
+        </nav>
+    </div>
+</header>
+<!-- end header section -->
+{% endblock headerSection %}

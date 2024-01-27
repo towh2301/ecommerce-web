@@ -1,0 +1,73 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block scripts %}
+<script src="{% static 'home/alter_cart.js' %}" defer></script>
+<script src="{% static 'home/load_data.js' %}" defer></script>
+<script src="{% static 'home/notifications.js' %}" defer></script>
+
+{% comment %} Session id for user without login {% endcomment %}
+<script src="{% static "home/session.js" %}"></script>
+{% endblock scripts %}
+
+
+{% block foodSection %}
+{% if messages %}
+{% for message in messages %}
+<div id="message">
+    <div class="message message--success"
+        style="animation: 0.3s ease 0s 1 normal none running slideInLeft, 1s linear 5s 1 normal forwards running fadeOut;">
+        <div class="message__icon">
+            <i class="fas fa-exclamation-circle"></i>
+        </div>
+        <div class="message__body">
+            <h3 class="message__title">Success!</h3>
+            <p class="message__msg">{{ message }}</p>
+        </div>
+        <div class="message__close">
+            <i class="fas fa-times close-message"></i>
+        </div>
+    </div>
+</div>
+{% endfor %}
+{% endif %}
+<!-- food section -->
+<div id="message"></div>
+<section class="food_section layout_padding-bottom">
+    <div class="container">
+        <div class="heading_container heading_center">
+            <h2>
+                Our Menu
+            </h2>
+        </div>
+
+        <!-- Phân loại sản phẩm ở đây-->
+        <ul class="filters_menu">
+            <li class="active select-category-btn" data-filter="All" id="all-categories">
+                All
+            </li>
+            {% for category in categories %}
+            <li data-filter="{{ category.key }}" class="select-category-btn">{{ category.value }}</li>
+            {% endfor %}
+        </ul>
+
+        <div class="filters-content">
+            {% csrf_token %}
+            <div class="row grid"></div>
+        </div>
+        <!-- Page Navigation -->
+        <nav aria-label="Page navigation example" style="margin-top: 10px">
+            <ul class="pagination justify-content-center">
+                <li class="page-item" id="first-page-div"></li>
+                <li class="page-item" id="previous-div"></li>
+                <li class="page-item active page-link" id="current-page"
+                    style="background-color: #ffbe33; color: white;"></li>
+                <li class="page-item" id="next-div"></li>
+                <li class="page-item" id="last-page-div"></li>
+            </ul>
+        </nav>
+        <!-- End Page Navigation -->
+    </div>
+</section>
+<!-- end food section -->
+{% endblock foodSection %}

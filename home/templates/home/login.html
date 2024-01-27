@@ -1,0 +1,267 @@
+{% extends 'base.html' %}
+{% load static %}
+{% load cart_template_tags %}
+{% block scripts %}
+    <script src="{% static 'home/login.js' %}" defer></script>
+    <script src="{% static 'home/notifications.js' %}" defer></script>
+    <link rel="stylesheet" type="text/css" href="{% static 'style.css' %}"/>
+{% endblock scripts %}
+
+{% block login %}
+    <!-- login section -->
+    <div class="container bs parent mb-3 mt-3" id="container">
+        <div class="form-container sign-up-container bs">
+            <form action="" method="POST">
+                {% csrf_token %}
+                <h1>Create Account</h1>
+                <div class="social-container bs">
+                    <a href="{% url 'social:begin' 'facebook' %}" class="social bs"><i
+                            class="fab fa-facebook-f"></i></a>
+                    {#                    <a href="#" class="social bs"><i class="fab fa-google-plus-g"></i></a>#}
+                    {#                    <a href="#" class="social bs"><i class="fab fa-linkedin-in"></i></a>#}
+                </div>
+                <span>or use your email for registration</span>
+                <input type="text" placeholder="Username" class="bs" name="username_signup"/>
+                <input type="email" placeholder="Email" class="bs" name="email_signup"/>
+                <input type="password" placeholder="Password" class="bs" name="password_signup"/>
+                <button type="submit" name="signup-btn">Sign Up</button>
+            </form>
+        </div>
+
+
+        <div class="form-container sign-in-container bs">
+            <form action="" method="POST">
+                {% csrf_token %}
+                <h1>Sign in</h1>
+                <div class="social-container bs">
+                    <a href="{% url 'social:begin' 'facebook' %}" class="social bs"><i
+                            class="fab fa-facebook-f"></i></a>
+                    {#                    <a href="#" class="social bs"><i class="fab fa-google-plus-g"></i></a>#}
+                    {#                    <a href="#" class="social bs"><i class="fab fa-linkedin-in"></i></a>#}
+                </div>
+                <span>or use your account</span>
+                <input type="text" placeholder="Username" class="bs" name="username" autofocus/>
+                <input type="password" placeholder="Password" class="bs" name="password"/>
+                <a href="{% url 'home:reset_password' %}">Forgot your password?</a>
+                <button type="submit" name="signin-btn">Sign In</button>
+            </form>
+        </div>
+
+
+        <div class="overlay-container bs">
+            <div class="overlay bs">
+                <div class="overlay-panel overlay-left bs">
+                    <h1>Welcome Back!</h1>
+                    <p>To keep connected with us please login with your personal info</p>
+                    <button class="ghost bs" id="signIn">Sign In</button>
+                </div>
+                <div class="overlay-panel overlay-right bs">
+                    <h1>Hello, Friend!</h1>
+                    <p>Enter your personal details and start journey with us</p>
+                    <button class="ghost bs" id="signUp">Sign Up</button>
+                </div>
+            </div>
+        </div>
+    </div>
+    {% if messages %}
+        {% for message in messages %}
+            <div id="message">
+                <div class="message message--error"
+                     style="animation: 0.3s ease 0s 1 normal none running slideInLeft, 1s linear 5s 1 normal forwards running fadeOut;">
+                    <div class="message__icon">
+                        <i class="fas fa-exclamation-circle"></i>
+                    </div>
+                    <div class="message__body">
+                        <h3 class="message__title">Error!</h3>
+                        <p class="message__msg">{{ message }}</p>
+                    </div>
+                    <div class="message__close">
+                        <i class="fas fa-times close-message"></i>
+                    </div>
+                </div>
+            </div>
+        {% endfor %}
+    {% endif %}
+    <!-- end login section -->
+{% endblock login %}
+
+{% block offerSection %}
+{% endblock offerSection %}
+
+{% block aboutSection %}
+{% endblock aboutSection %}
+
+{% block bookSection %}
+{% endblock bookSection %}
+
+{% block clientSection %}
+{% endblock clientSection %}
+
+{% block headerSection %}
+    <!-- header section -->
+    <div class="hero_area">
+        <div class="bg-box">
+            <img src="{% static 'images/hero-bg.jpg' %}" alt="">
+        </div>
+        <!-- header section strats -->
+        <header class="header_section">
+            <div class="container">
+                <nav class="navbar navbar-expand-lg custom_nav-container ">
+                    <a class="navbar-brand" href="{% url 'home:home' %}">
+                    <span>
+                        Feane
+                    </span>
+                    </a>
+
+                    <button class="navbar-toggler" type="button" data-toggle="collapse"
+                            data-target="#navbarSupportedContent" aria-controls="navbarSupportedContent"
+                            aria-expanded="false"
+                            aria-label="Toggle navigation">
+                        <span class=""> </span>
+                    </button>
+
+                    <div class="collapse navbar-collapse" id="navbarSupportedContent">
+                        <ul class="navbar-nav  mx-auto ">
+                            <li class="nav-item active">
+                                <a class="nav-link" href="{% url 'home:home' %}">Home <span
+                                        class="sr-only">(current)</span></a>
+                            </li>
+                            <li class="nav-item">
+                                <a class="nav-link" href="{% url 'home:menu' %}">Menu</a>
+                            </li>
+                            <li class="nav-item">
+                                <a class="nav-link" href="{% url 'home:about' %}">About</a>
+                            </li>
+                            <li class="nav-item">
+                                <a class="nav-link" href="{% url 'home:book-table' %}">Book Table</a>
+                            </li>
+                        </ul>
+                        <div class="user_option">
+                            {% if request.user.is_authenticated %}
+                                <div class="dropdown">
+                                    <a href="#" class="user_link" id="dropdownMenuLink" data-toggle="dropdown">
+                                        <i class="fa fa-user" aria-hidden="true"></i>
+                                    </a>
+                                    <div class="dropdown-menu dropdown-menu-right" aria-labelledby="dropdownMenuLink">
+                                        <a class="dropdown-item" href="{% url 'home:get-profile-user' %}">Profile</a>
+                                        <a class="dropdown-item" href="{% url 'home:logout' %}">Log out</a>
+                                    </div>
+                                </div>
+
+                            {% else %}
+                                <a href="{% url 'home:login' %}" class="user_link">
+                                    <i class="fa fa-user" aria-hidden="true"></i>
+                                </a>
+                            {% endif %}
+                            <a class="text-reset me-3" id="cart-icon" href="{% url 'home:cart-summary' %}">
+                                <i class="fas fa-shopping-cart" style="color: white;"></i>
+                                <span class="badge rounded-pill badge-notification bg-danger" id="cart-item-count"
+                                      style="background-color: #ffbe33!important;">{{ request|cart_item_count }}</span>
+                            </a>
+                            <a href="{% url 'home:menu' %}" class="order_online">
+                                Order Online
+                            </a>
+                        </div>
+                    </div>
+                </nav>
+            </div>
+        </header>
+        <!-- end header section -->
+        <!-- slider section -->
+        <section class="slider_section ">
+            <div id="customCarousel1" class="carousel slide" data-ride="carousel">
+                <div class="carousel-inner">
+                    <div class="carousel-item active">
+                        <div class="container ">
+                            <div class="row">
+                                <div class="col-md-7 col-lg-6 ">
+                                    <div class="detail-box">
+                                        <h1>
+                                            Fast Food Restaurant
+                                        </h1>
+                                        <p>
+                                            Indulge in the fantastic flavors of true, freshly baked pizzas – the
+                                            piping-hot
+                                            crusts layered with gooey cheese, savory meats, and crisp, fresh vegetables.
+                                            Explore the traditional taste or venture into new and exciting variations;
+                                            the
+                                            corners of the pizza world await your discovery!
+                                        </p>
+                                        <div class="btn-box">
+                                            <a href="" class="btn1">
+                                                Order Now
+                                            </a>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="carousel-item ">
+                        <div class="container ">
+                            <div class="row">
+                                <div class="col-md-7 col-lg-6 ">
+                                    <div class="detail-box">
+                                        <h1>
+                                            Fast Food Restaurant
+                                        </h1>
+                                        <p>
+                                            Embark on a journey through the diverse world of pasta – from long, slender
+                                            spaghetti to short, tubular penne and rich, filled ravioli. Immerse yourself
+                                            in
+                                            the delightful taste of various sauces perfectly complementing the best and
+                                            freshest pasta. Each dish of pasta is a new adventure in discovering
+                                            flavors!
+                                        </p>
+                                        <div class="btn-box">
+                                            <a href="" class="btn1">
+                                                Order Now
+                                            </a>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="carousel-item">
+                        <div class="container ">
+                            <div class="row">
+                                <div class="col-md-7 col-lg-6 ">
+                                    <div class="detail-box">
+                                        <h1>
+                                            Fast Food Restaurant
+                                        </h1>
+                                        <p>
+                                            Fry fries are more than just a popular dish; they're an experience of
+                                            diverse
+                                            spices and flavors. Enjoy the perfect combination of crispiness and
+                                            softness,
+                                            coupled with unique dipping sauces. Explore the diverse world of fry fries
+                                            and
+                                            discover your favorite flavor today!
+                                        </p>
+                                        <div class="btn-box">
+                                            <a href="" class="btn1">
+                                                Order Now
+                                            </a>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="container">
+                    <ol class="carousel-indicators">
+                        <li data-target="#customCarousel1" data-slide-to="0" class="active"></li>
+                        <li data-target="#customCarousel1" data-slide-to="1"></li>
+                        <li data-target="#customCarousel1" data-slide-to="2"></li>
+                    </ol>
+                </div>
+            </div>
+
+        </section>
+        <!-- end slider section -->
+    </div>
+    <!-- header section -->
+{% endblock headerSection %}

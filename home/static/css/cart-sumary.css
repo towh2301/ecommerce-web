@@ -1,0 +1,46 @@
+/* Reset default button styles */
+.sort-btn,
+.remove-btn {
+    border: 1px solid transparent; /* Remove default border */
+    background: none; /* Remove default background */
+    padding: 8px 16px; /* Set padding */
+    cursor: pointer; /* Show pointer cursor on hover */
+    outline: none; /* Remove outline on focus (for accessibility) */
+    box-shadow: none; /* Remove default box shadow */
+    font-size: 16px;
+    color: #000; /* Text color */
+    text-decoration: none; /* Remove underline */
+}
+
+/* Remove button styles on click */
+.sort-btn:active,
+.sort-btn:focus,
+.remove-button:active,
+.remove-button:focus {
+    border: 1px solid transparent; /* Remove border on click */
+    background: none; /* Remove background on click */
+    box-shadow: none; /* Remove box shadow on click */
+    outline: none; /* Remove the outline on click */
+}
+
+.card-custom {
+    width: 100%;
+    height: fit-content;
+    box-sizing: border-box;
+}
+
+.remove-button {
+    border: 1px solid transparent; /* Remove default border */
+    background: none; /* Remove default background */
+    cursor: pointer; /* Show pointer cursor on hover */
+    outline: none; /* Remove outline on focus (for accessibility) */
+    box-shadow: none; /* Remove default box shadow */
+    font-size: 16px;
+    color: #000; /* Text color */
+    text-decoration: none; /* Remove underline */
+}
+
+.remove-btn {
+    width: 15px;
+    margin: 0px;
+}

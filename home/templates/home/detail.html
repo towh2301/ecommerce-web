@@ -1,0 +1,98 @@
+{% extends "base.html" %}
+{% load static %}
+{% block scripts %}
+    <script src="{% static 'home/alter_cart.js' %}" defer></script>
+    <script src="{% static 'home/notifications.js' %}" defer></script>
+{% endblock scripts %}
+{% block detail %}
+    <div id="message"></div>
+    <section class="py-5">
+        <div class="container">
+            <div class="row gx-5">
+                <aside class="col-lg-6">
+                    <div class="border rounded-4 mb-3 d-flex justify-content-center">
+                        <img style="max-width: 100%; max-height: 100vh; margin: auto;" class="rounded-4 fit"
+                             src="{{ object.image.url }}"/>
+                    </div>
+                </aside>
+                <main class="col-lg-6">
+                    <div class="ps-lg-3  filters-content">
+                        <h4 class="title text-dark">
+                            {{ object.title }}
+                        </h4>
+                        <div class="d-flex flex-row my-3">
+                            <div class="text-warning mb-1 me-2">
+                                <i class="fa fa-star"></i>
+                                <i class="fa fa-star"></i>
+                                <i class="fa fa-star"></i>
+                                <i class="fa fa-star"></i>
+                                <i class="fas fa-star-half-alt"></i>
+                                <span class="ms-1">
+                                    4.5
+                                </span>
+                            </div>
+                            {#                            <span class="text-muted"><i class="fas fa-shopping-basket fa-sm mx-1"></i>154 orders</span>#}
+                            {#                            <span class="text-success ms-2">In stock</span>#}
+                        </div>
+
+                        <div class="mb-3">
+                            <span class="h5">{{ object.price }}đ</span>
+                            {#                            <span class="text-muted">/per box</span>#}
+                        </div>
+
+                        <p>
+                            {{ object.description }}
+                        </p>
+
+                        <div class="row">
+                            <dt class="col-3">Category:</dt>
+                            <dd class="col-9">{{ object.category|title }}</dd>
+
+                            {#                            <dt class="col-3">Color</dt>#}
+                            {#                            <dd class="col-9">Brown</dd>#}
+                            {##}
+                            {#                            <dt class="col-3">Material</dt>#}
+                            {#                            <dd class="col-9">Cotton, Jeans</dd>#}
+                            {##}
+                            {#                            <dt class="col-3">Brand</dt>#}
+                            {#                            <dd class="col-9">Reebook</dd>#}
+                        </div>
+
+                        <hr/>
+
+                        <div class="row">
+                            <div class="col-md-4 col-6">
+                                <div class="input-group mb-3">
+                                    <button class="btn btn-outline-secondary decrease-quantity-btn" type="button"><i
+                                            class="fas fa-minus"></i></button>
+                                    <input type="text" class="item-quantity form-control text-center" value="1">
+                                    <button class="btn btn-outline-secondary increase-quantity-btn" type="button"><i class="fas fa-plus"></i>
+                                    </button>
+                                </div>
+                            </div>
+                        </div>
+                        {% csrf_token %}
+                        <div class="all">
+                            <input class="item-slug" value="{{ object.slug }}" type="hidden">
+                            <a href="" class="btn btn-warning add-to-cart" style="color:white;"> <i
+                                    class="fas fa-shopping-cart"></i> Add to
+                                cart </a>
+                        </div>
+                    </div>
+                </main>
+            </div>
+        </div>
+    </section>
+    <!-- content -->
+{% endblock detail %}
+{% block offerSection %}
+{% endblock offerSection %}
+
+{% block aboutSection %}
+{% endblock aboutSection %}
+
+{% block bookSection %}
+{% endblock bookSection %}
+
+{% block clientSection %}
+{% endblock clientSection %}

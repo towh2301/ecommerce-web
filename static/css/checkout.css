@@ -1,0 +1,123 @@
+.return-btn {
+    border: 1px solid transparent; /* Remove default border */
+    background: none; /* Remove default background */
+    padding: 8px 16px; /* Set padding */
+    cursor: pointer; /* Show pointer cursor on hover */
+    outline: none; /* Remove outline on focus (for accessibility) */
+    box-shadow: none; /* Remove default box shadow */
+    font-size: 20px;
+    color: #000; /* Text color */
+    text-decoration: none;
+    align-items: center; /* Remove underline */
+    margin-left: 15px;
+}
+
+.return-btn:focus,
+.return-btn:hover {
+    color: rgb(214, 83, 83);
+    text-decoration: none;
+    cursor: pointer;
+    outline: none;
+}
+
+.pay-btn {
+    margin-top: 10px;
+    width: 100%;
+}
+
+.checkout-card {
+    background-color: #fff;
+    border-radius: 10px;
+    box-shadow: 0 0 20px rgba(0, 0, 0, 0.1);
+    padding: 20px;
+    margin: 20px;
+    margin-left: auto;
+    margin-right: auto;
+}
+
+.window {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+h5 {
+    margin-top: 20px;
+    margin-bottom: 10px;
+    position: relative;
+}
+.total {
+    display: flex;
+    justify-content: space-between;
+    margin-top: 10px;
+}
+
+.credit-info-content {
+    text-align: left;
+    margin-top: 20px;
+}
+
+#tr-row td {
+    text-align: left;
+    vertical-align: middle;
+    padding-top: 15px;
+    padding-bottom: 15px;
+    /* Border color between rows */
+}
+
+#card-dropdown {
+    width: 100%;
+    position: relative;
+}
+
+.form-group select {
+    width: 100%;
+    margin-top: 14px;
+    margin-bottom: 10px;
+    border: 1px solid #d1d1d1;
+    border-radius: 2px;
+    box-sizing: border-box;
+    background-color: #f8f9fa; /* Light gray background color */
+}
+
+.form-group textarea,
+.form-group input {
+    width: 100%;
+    padding: 10px;
+    margin-top: 10px;
+    margin-bottom: 10px;
+    border: 1px solid #d1d1d1;
+    border-radius: 5px;
+    box-sizing: border-box;
+}
+
+.form-group label {
+    display: block;
+    margin-bottom: 5px;
+    font-weight: bold;
+}
+
+.form-group textarea,
+.form-group input {
+    width: 100%;
+    padding: 10px;
+    margin-top: 10px;
+    margin-bottom: 10px;
+    border: 1px solid #d1d1d1;
+    border-radius: 5px;
+    box-sizing: border-box;
+}
+
+#map {
+    height: 550px;
+    margin-left: auto;
+    margin-right: auto;
+    margin-top: auto;
+    margin-bottom: auto;
+    border-radius: 10px;
+    box-shadow: 10px 10px 10px rgba(0, 0, 0, 0.1);
+}
+
+.row-div {
+    display: flex;
+}

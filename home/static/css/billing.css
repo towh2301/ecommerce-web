@@ -1,0 +1,233 @@
+/* Reset default button styles */
+.sort-btn,
+.remove-btn {
+    border: 1px solid transparent; /* Remove default border */
+    background: none; /* Remove default background */
+    padding: 8px 16px; /* Set padding */
+    cursor: pointer; /* Show pointer cursor on hover */
+    outline: none; /* Remove outline on focus (for accessibility) */
+    box-shadow: none; /* Remove default box shadow */
+    font-size: 16px;
+    color: #000; /* Text color */
+    text-decoration: none;
+    align-items: center; /* Remove underline */
+}
+
+/* Remove button styles on click */
+.sort-btn:active,
+.sort-btn:focus {
+    border: 1px solid transparent; /* Remove border on click */
+    background: none; /* Remove background on click */
+    box-shadow: none; /* Remove box shadow on click */
+    outline: none; /* Remove the outline on click */
+}
+
+.card-custom {
+    width: 100%;
+    height: fit-content;
+    box-sizing: border-box;
+    margin-left: auto;
+    margin-right: auto;
+}
+
+.remove-button,
+.pay-button {
+    border: 1px solid transparent; /* Remove default border */
+    background: none; /* Remove default background */
+    cursor: pointer; /* Show pointer cursor on hover */
+    outline: none; /* Remove outline on focus (for accessibility) */
+    box-shadow: none; /* Remove default box shadow */
+    font-size: 20px;
+    color: #000; /* Text color */
+    text-decoration: none; /* Remove underline */
+}
+
+.remove-btn {
+    width: 15px;
+    margin: 0px;
+}
+.total-price,
+.status,
+h6 {
+    margin-top: auto;
+    margin-bottom: auto;
+}
+.total-price {
+    align-items: center;
+    justify-content: center;
+    text-align: center;
+}
+/* Style the modal */
+.modal {
+    display: none; /* Hide the modal by default */
+    position: fixed;
+    z-index: 1;
+    left: 0;
+    top: 0;
+    width: 100%;
+    height: 100%;
+    overflow: auto;
+    background-color: rgba(0, 0, 0, 0.7); /* transparent background */
+}
+
+/* Appear slowly */
+#itemModal {
+    display: none;
+    position: fixed;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    z-index: 1;
+    background-color: rgba(77, 77, 77, 0.671);
+    padding: 20px;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+    opacity: 0;
+    transition: opacity 0.8s ease-in-out;
+}
+
+#itemModal.active {
+    display: block;
+    opacity: 1;
+}
+
+.modal-content {
+    background-color: #fefefe;
+    margin: 15% auto;
+    padding: 10px 20px 20px 20px;
+    border: 1px solid #888;
+    width: 60%;
+}
+
+.close-btn,
+.plus-btn,
+.minus-btn {
+    border: none;
+    font-weight: bolder;
+    background-color: white;
+}
+
+.close-btn {
+    float: right;
+    text-align: left;
+    justify-content: left;
+    font-size: 28px;
+    width: 32px;
+    height: 32px;
+    border-radius: 20px;
+    margin-bottom: 15px;
+}
+
+.plus-btn,
+.minus-btn {
+    font-size: 14px;
+    border-radius: 20px;
+}
+
+.close-btn:hover,
+.close-btn:focus,
+.minus-btn:hover,
+.minus-btn:focus,
+.remove-button:hover,
+.remove-button:focus {
+    color: rgb(214, 83, 83);
+    text-decoration: none;
+    cursor: pointer;
+    outline: none;
+}
+
+.plus-btn:hover,
+.plus-btn:focus,
+.pay-button:hover,
+.pay-button:focus {
+    color: rgb(83, 214, 133);
+    text-decoration: none;
+    cursor: pointer;
+    outline: none;
+}
+
+.delete-btn {
+    height: fit-content;
+    margin-right: 15px;
+    align-items: center;
+    justify-content: center;
+    font-weight: bold;
+    font-size: 12px;
+}
+
+#generated-quan {
+    text-align: center;
+    align-items: center;
+    justify-content: center;
+    font-size: 14px;
+}
+
+.shop-status,
+.sort-price {
+    margin-top: 10px;
+    margin-bottom: auto;
+}
+
+#status-span {
+    font-weight: bold;
+}
+
+.date-order {
+    margin-left: 30px;
+}
+
+.status-span {
+    background-color: rgb(161, 161, 161);
+    padding-left: 5px;
+    padding-right: 5px;
+    padding-top: 2px;
+    padding-bottom: 2px;
+    color: whitesmoke;
+    border-radius: 5px;
+    font-weight: bold;
+    font-size: 14px;
+}
+
+#item-row-modal {
+    border: 1px solid #888;
+    padding: 10px;
+    margin-bottom: 10px;
+    margin-top: 5px;
+    width: 100%;
+    margin-left: auto;
+    margin-right: auto;
+    height: fit-content;
+    border-radius: 10px;
+    align-items: center;
+    justify-content: center;
+    font-size: 14px;
+    font-weight: bold;
+}
+
+.product-img-billing {
+    box-sizing: border-box;
+    width: auto;
+    height: 60px;
+    object-fit: contain;
+    right: 20px;
+}
+
+.btn {
+    align-items: center;
+}
+
+@media screen and (max-width: 600px) {
+    .datetime-tag,
+    .outline {
+        display: none; /* Hide the div on smaller screens */
+    }
+}
+
+.card-custom {
+    position: absolute;
+    transition: background-color 0.6s ease-in-out, box-shadow 0.6s ease-in-out;
+}
+
+.card-custom:hover {
+    box-shadow: 0 5px 10px rgba(0, 0, 0, 0.1);
+    background-color: #d4d4d4;
+}
