@@ -1,0 +1,9 @@
+Django>=4.2,<5.0
+mysqlclient
+djangorestframework
+social-auth-app-django
+django-vi-address
+django-vnpay
+Pillow
+googlemaps
+geopy

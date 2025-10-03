@@ -24,7 +24,7 @@ SECRET_KEY = 'django-insecure-8vc-(o#4u1txx0wc_nkj4o97*t_xv&3^poowo6_xp5-w23(6p5
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
-ALLOWED_HOSTS = []
+ALLOWED_HOSTS = ['127.0.0.1', 'localhost']
 
 # Application definition
 
@@ -52,7 +52,7 @@ MIDDLEWARE = [
     'django.contrib.messages.middleware.MessageMiddleware',
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
 
-    'social_django.middleware.SocialAuthExceptionMiddleware', #new
+    'social_django.middleware.SocialAuthExceptionMiddleware',  # new
 ]
 
 ROOT_URLCONF = 'ProjectB_Final.urls'
@@ -70,8 +70,8 @@ TEMPLATES = [
                 'django.contrib.auth.context_processors.auth',
                 'django.contrib.messages.context_processors.messages',
 
-                'social_django.context_processors.backends',        #new
-                'social_django.context_processors.login_redirect',  #new
+                'social_django.context_processors.backends',  # new
+                'social_django.context_processors.login_redirect',  # new
             ],
         },
     },
@@ -82,27 +82,24 @@ WSGI_APPLICATION = 'ProjectB_Final.wsgi.application'
 # Database
 # https://docs.djangoproject.com/en/4.2/ref/settings/#databases
 
-DATABASES = {
-    'default': {
-        'ENGINE': 'django.db.backends.mysql',
-        'NAME': 'projectb',
-        'USER': 'root',
-        'PASSWORD': '',
-        'HOST': '127.0.0.1',
-        'PORT': '3306',
-    }
-}
-
 # DATABASES = {
 #     'default': {
 #         'ENGINE': 'django.db.backends.mysql',
 #         'NAME': 'projectb',
 #         'USER': 'root',
 #         'PASSWORD': '',
-#         'HOST': 'localhost',
+#         'HOST': '127.0.0.1',
 #         'PORT': '3306',
 #     }
 # }
+
+# Use SQLITE for easier setup
+DATABASES = {
+    'default': {
+        'ENGINE': 'django.db.backends.sqlite3',
+        'NAME': BASE_DIR / 'db.sqlite3',
+    }
+}
 
 # Password validation
 # https://docs.djangoproject.com/en/4.2/ref/settings/#auth-password-validators
@@ -152,7 +149,7 @@ STATICFILES_DIRS = [
 MEDIA_URL = '/media/'
 MEDIA_ROOT = BASE_DIR / 'media'
 
-#Facebook Login
+# Facebook Login
 AUTHENTICATION_BACKENDS = [
     'social_core.backends.facebook.FacebookOAuth2',
     'social_core.backends.twitter.TwitterOAuth',
@@ -173,12 +170,15 @@ SESSION_COOKIE_AGE = 6000
 SESSION_SAVE_EVERY_REQUEST = True
 
 # Forgot password
-EMAIL_BACKEND = "django.core.mail.backends.smtp.EmailBackend"
-EMAIL_HOST = 'smtp.gmail.com'
-EMAIL_PORT = 587
-EMAIL_USE_TLS = True
-EMAIL_HOST_USER = ''
-EMAIL_HOST_PASSWORD = ''
+if DEBUG:
+    EMAIL_BACKEND = "django.core.mail.backends.console.EmailBackend"
+else:
+    EMAIL_BACKEND = "django.core.mail.backends.smtp.EmailBackend"
+    EMAIL_HOST = 'smtp.gmail.com'
+    EMAIL_PORT = 587
+    EMAIL_USE_TLS = True
+    EMAIL_HOST_USER = ''
+    EMAIL_HOST_PASSWORD = ''
 
 # VNPay config
 VNPAY_RETURN_URL = 'http://localhost:8000/payment_return'  # get from config
@@ -200,4 +200,3 @@ REST_FRAMEWORK = {
         'rest_framework.permissions.IsAuthenticated',
     ],
 }
-

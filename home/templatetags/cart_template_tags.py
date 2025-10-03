@@ -11,6 +11,5 @@ def cart_item_count(request):
     else:
         device = request.COOKIES.get("device")
         guest, created = Guest.objects.get_or_create(device=device)
-        cart, created = Cart.objects.get_or_create(guest=guest, ordered=False)        
+        cart, created = Cart.objects.get_or_create(guest=guest, ordered=False)
     return cart.items.count()
-    

@@ -1126,16 +1126,7 @@ def delete_optional_address(request):
 def get_districts(request):
     city_id = request.GET.get("city_id")
     if city_id:
-        districts = DISTRICTS.filter(parent_code_id=city_id)
-        items = []
-        for district in districts:
-            item = {
-                "name": district.name,
-                "id": district.id,
-                "name_with_type": district.name_with_type,
-            }
-            items.append(item)
-        return JsonResponse({"items": items})
+        return get_location_infor(city_id)
     else:
         return JsonResponse({"error": "Invalid city_id"})
 
@@ -1143,18 +1134,22 @@ def get_districts(request):
 def get_wards(request):
     district_id = request.GET.get("district_id")
     if district_id:
-        wards = WARDS.filter(parent_code_id=district_id)
-        items = []
-        for ward in wards:
-            item = {
-                "name": ward.name,
-                "id": ward.id,
-                "name_with_type": ward.name_with_type,
-            }
-            items.append(item)
-        return JsonResponse({"items": items})
+        return get_location_infor(district_id)
     else:
         return JsonResponse({"error": "Invalid district_id"})
+
+
+def get_location_infor(location_id):
+    districts = DISTRICTS.filter(parent_code_id=location_id)
+    items = []
+    for district in districts:
+        item = {
+            "name": district.name,
+            "id": district.id,
+            "name_with_type": district.name_with_type,
+        }
+        items.append(item)
+    return JsonResponse({"items": items})
 
 
 # VNPay
