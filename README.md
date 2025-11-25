@@ -79,10 +79,3 @@ py manage.py runserver
 The site will be available at:
 - Frontend: http://127.0.0.1:8000/
 - Admin: http://127.0.0.1:8000/admin/
-
-## 13) Next steps
-- Add .env support (e.g., using python-dotenv or django-environ) to simplify setup.
-- Replace hardcoded secrets in settings.py with environment variables.
-- Write seeds/fixtures for sample products and categories.
-
-If you need help starting the server on your machine, tell me your Python and MySQL versions and I’ll tailor the exact commands for you.
